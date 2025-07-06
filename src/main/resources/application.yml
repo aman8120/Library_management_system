@@ -1,0 +1,17 @@
+Spring:
+  application:
+    name: library_management_system_api
+
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+#server:
+#  port: 8080
+
