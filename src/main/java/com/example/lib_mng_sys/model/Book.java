@@ -23,10 +23,13 @@ public class Book {
 
 
     @Column(name = "is_available")
-    private boolean isAvailable;
+    private boolean available;
+
+    @Column(name = "image")
+    private String image;
 
     @ManyToOne
-    private Normal_User user;
+    private NormalUser user;
 
     @ManyToOne
     private Author author;

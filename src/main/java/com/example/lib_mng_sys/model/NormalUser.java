@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name="normal_user")
 @EntityListeners(AuditingEntityListener.class)
-public class Normal_User extends User {
+public class NormalUser extends User {
 
     @CreatedBy
     @Column(name = "createdBy")
