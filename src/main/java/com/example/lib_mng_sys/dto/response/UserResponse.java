@@ -16,7 +16,12 @@ public class UserResponse {
 
     private String userName;
 
+    private String email;
+
+    private long phNo;
+
     private UserRole role;
+
 
     private LocalDateTime createdAt;
 
