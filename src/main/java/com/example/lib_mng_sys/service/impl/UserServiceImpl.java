@@ -10,8 +10,10 @@ import com.example.lib_mng_sys.model.Admin;
 import com.example.lib_mng_sys.model.NormalUser;
 import com.example.lib_mng_sys.model.User;
 import com.example.lib_mng_sys.repository.UserRepositoy;
+import com.example.lib_mng_sys.security.util.UserIdentity;
 import com.example.lib_mng_sys.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,14 +26,21 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepositoy userRepositoy;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse registerUser(RegistrationRequest registrationRequest) {
         User child = this.createUserByRole(registrationRequest.getRole());
 
         userMapper.mapToNewUser(registrationRequest, child);
+        this.encryptPassword(child);
         userRepositoy.save(child);
         return userMapper.mapToUserResponse(child);
+    }
+
+    private void encryptPassword(User user){
+        String encodedPassword=passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
     }
 
 
