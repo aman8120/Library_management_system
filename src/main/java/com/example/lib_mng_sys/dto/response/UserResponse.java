@@ -18,7 +18,7 @@ public class UserResponse {
 
     private String email;
 
-    private long phNo;
+    private String phNo;
 
     private UserRole role;
 
