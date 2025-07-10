@@ -3,11 +3,16 @@ package com.example.lib_mng_sys.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.List;
 
 @Entity
 @Table(name = "books")
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Book {
 
     @Id
@@ -27,6 +32,10 @@ public class Book {
 
     @Column(name = "image")
     private String image;
+
+    @CreatedBy
+    @Column(name = "createdBy")
+    private String createdBy;
 
     @ManyToOne
     private NormalUser user;
