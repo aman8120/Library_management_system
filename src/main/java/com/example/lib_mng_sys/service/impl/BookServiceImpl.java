@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,8 +45,30 @@ public class BookServiceImpl implements BookSevice {
         }
 
         book.setUser((NormalUser) user);
+        book.setReturned(false);
         book.setAvailable(false);
+        book.setIssueDate(LocalDate.now());
 
+        bookRepository.save(book);
+    }
+
+    @Override
+    public void returnBook(Long bookId, Long userId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        if (book.isAvailable() || book.isReturned()) {
+            throw new RuntimeException("Book is already returned or not lent");
+        }
+
+        if (book.getUser() == null || !(book.getUser().getUserId()==userId)) {
+            throw new RuntimeException("This user is not assigned this book");
+        }
+
+        book.setReturned(true);
+        book.setAvailable(true);
+        book.setReturnDate(LocalDate.now());
+        book.setUser(null); // Optional: disassociate the user
         bookRepository.save(book);
     }
 

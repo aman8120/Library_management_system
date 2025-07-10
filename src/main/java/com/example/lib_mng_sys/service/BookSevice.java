@@ -23,4 +23,5 @@ public interface BookSevice {
 
     void lendBook(Long bookId, Long userId);
 
+    void returnBook(Long bookId, Long userId);
 }
