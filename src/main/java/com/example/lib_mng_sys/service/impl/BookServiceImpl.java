@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BookServiceImpl  implements BookSevice {
+public class BookServiceImpl implements BookSevice {
 
     private final BookRepository bookRepository;
     private final UserRepositoy userRepositoy;
@@ -132,10 +132,14 @@ public class BookServiceImpl  implements BookSevice {
 
     @Override
     public List<BookResponse> searchBooks(String title, String author, String publisher, String category) {
-        if (title != null) return bookMapper.mapToBookResponseList(bookRepository.findByTitleContainingIgnoreCase(title));
-        if (author != null) return bookMapper.mapToBookResponseList(bookRepository.findByAuthor_NameContainingIgnoreCase(author));
-        if (publisher != null) return bookMapper.mapToBookResponseList(bookRepository.findByPublisher_NameContainingIgnoreCase(publisher));
-        if (category != null) return bookMapper.mapToBookResponseList(bookRepository.findByCategoryContainingIgnoreCase(category));
+        if (title != null)
+            return bookMapper.mapToBookResponseList(bookRepository.findByTitleContainingIgnoreCase(title));
+        if (author != null)
+            return bookMapper.mapToBookResponseList(bookRepository.findByAuthor_NameContainingIgnoreCase(author));
+        if (publisher != null)
+            return bookMapper.mapToBookResponseList(bookRepository.findByPublisher_NameContainingIgnoreCase(publisher));
+        if (category != null)
+            return bookMapper.mapToBookResponseList(bookRepository.findByCategoryContainingIgnoreCase(category));
         throw new RuntimeException("Please provide a valid search parameter");
     }
 
