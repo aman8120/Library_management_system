@@ -100,4 +100,14 @@ public class BookController {
     }
 
 
+    @PostMapping("/return")
+    public ResponseEntity<ResponseStructure<String>> returnBook(
+            @RequestParam Long bookId,
+            @RequestParam Long userId) {
+
+        bookSevice.returnBook(bookId, userId);
+        return ResponseBuilder.ok("Book returned successfully", "Book ID " + bookId + " returned by User ID " + userId);
+    }
+
+
 }
