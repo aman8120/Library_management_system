@@ -9,6 +9,7 @@ import com.example.lib_mng_sys.util.ResponseBuilder;
 import com.example.lib_mng_sys.util.ResponseStructure;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     private final UserService userService;
@@ -28,13 +29,14 @@ public class UserController {
 
     }
 
-    @GetMapping("/get")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
     public ResponseEntity<ResponseStructure<List<UserResponse>>> findAllUser() {
         List<UserResponse> userResponse = userService.findAllUser();
         return ResponseBuilder.ok("User Found", userResponse);
     }
 
-    @GetMapping("/get/email/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<ResponseStructure<UserResponse>> findUserByEmail(@PathVariable String email) {
 
         UserResponse userResponse = userService.findUserByEmail(email);
@@ -42,7 +44,8 @@ public class UserController {
 
     }
 
-    @GetMapping("/get/id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ResponseStructure<UserResponse>> findUserById(@PathVariable long id) {
 
         UserResponse userResponse = userService.findUserById(id);
@@ -54,16 +57,16 @@ public class UserController {
     @PutMapping("/update/email/{email}")
     public ResponseEntity<ResponseStructure<UserResponse>> updateUserByEmail(@PathVariable String email, @RequestBody UserRequest userRequest) {
 
-     UserResponse response =  userService.updateUserByEmail(email,userRequest);
-     return ResponseBuilder.ok("User Update",response);
+        UserResponse response = userService.updateUserByEmail(email, userRequest);
+        return ResponseBuilder.ok("User Update", response);
 
 
     }
 
-
+    //    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<ResponseStructure<UserResponse>> deleteUserById(@PathVariable long id) {
-      UserResponse userResponse=  userService.deleteUserById(id);
+        UserResponse userResponse = userService.deleteUserById(id);
         return ResponseBuilder.ok("User Deleted", userResponse);
     }
 
@@ -71,8 +74,8 @@ public class UserController {
     @PutMapping("/update/id/{id}")
     public ResponseEntity<ResponseStructure<UserResponse>> updateUserById(@PathVariable long id, @RequestBody UserRequest userRequest) {
 
-        UserResponse response =  userService.updateUserById(id,userRequest);
-        return ResponseBuilder.ok("User Update",response);
+        UserResponse response = userService.updateUserById(id, userRequest);
+        return ResponseBuilder.ok("User Update", response);
 
 
     }
