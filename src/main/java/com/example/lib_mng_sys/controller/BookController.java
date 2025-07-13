@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,13 +17,14 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/books")
+@RequestMapping("/api/v1/books")
 public class BookController {
 
     private final BookSevice bookSevice;
 
 
-//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    //    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ResponseStructure<BookResponse>> createBook(
             @RequestPart("data") String data,
@@ -40,6 +42,8 @@ public class BookController {
         return ResponseBuilder.created("Book Created", bookResponse);
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseStructure<BookResponse>> updateBook(
             @PathVariable Long id,
@@ -57,6 +61,7 @@ public class BookController {
         return ResponseBuilder.ok("Book Updated", bookResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseStructure<String>> deleteBook(@PathVariable Long id) {
         bookSevice.deleteBook(id);
@@ -85,6 +90,7 @@ public class BookController {
         return ResponseBuilder.ok("Search Results", books);
     }
 
+
     @PostMapping("/lend")
     public ResponseEntity<ResponseStructure<String>> lendBook(
             @RequestParam Long bookId,
@@ -92,5 +98,16 @@ public class BookController {
         bookSevice.lendBook(bookId, userId);
         return ResponseBuilder.ok("Book lent successfully", "Book ID " + bookId + " assigned to User ID " + userId);
     }
+
+
+    @PostMapping("/return")
+    public ResponseEntity<ResponseStructure<String>> returnBook(
+            @RequestParam Long bookId,
+            @RequestParam Long userId) {
+
+        bookSevice.returnBook(bookId, userId);
+        return ResponseBuilder.ok("Book returned successfully", "Book ID " + bookId + " returned by User ID " + userId);
+    }
+
 
 }

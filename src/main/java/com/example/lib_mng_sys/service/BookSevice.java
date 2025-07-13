@@ -22,4 +22,6 @@ public interface BookSevice {
     List<BookResponse> searchBooks(String title, String author, String publisher, String category);
 
     void lendBook(Long bookId, Long userId);
+
+    void returnBook(Long bookId, Long userId);
 }
